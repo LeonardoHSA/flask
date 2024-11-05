@@ -1,15 +1,18 @@
 # imports da biblioteca do flask
-from flask import Flask, render_template
+from flask import Flask, render_template, request
+
 
 class Jogo:
     def __init__(self, nome, categoria, console):
-        self.nome=nome
-        self.categoria=categoria
-        self.console=console
+        self.nome = nome
+        self.categoria = categoria
+        self.console = console
+
 
 # criando um objeto app chamando a função Flask (do tipo Flask),
 # o __name__ faz uma referência ao próprio arquivo
 app = Flask(__name__)
+
 
 # a rota da aplicação (127.0.0.1:5000/inicio)
 @app.route('/inicio')
@@ -20,6 +23,14 @@ def ola():
     jogo3 = Jogo('War Thunder', 'PVP', 'PC')
     lista = [jogo1, jogo2, jogo3]
     return render_template('lista.html', titulo='jogos', jogos=lista)
+
+@app.route('/novo')
+def novo():
+    return render_template('novo.html', titulo='Novo Jogo')
+
+@app.route('/criar')
+def criar():
+    
 
 # executando
 app.run()
