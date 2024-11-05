@@ -8,6 +8,10 @@ class Jogo:
         self.categoria = categoria
         self.console = console
 
+jogo1 = Jogo('Tetris', 'Puzzle', 'Atari')
+jogo2 = Jogo('World of Tanks', 'PVP', 'PC')
+jogo3 = Jogo('War Thunder', 'PVP', 'PC')
+lista = [jogo1, jogo2, jogo3]
 
 # criando um objeto app chamando a função Flask (do tipo Flask),
 # o __name__ faz uma referência ao próprio arquivo
@@ -15,22 +19,24 @@ app = Flask(__name__)
 
 
 # a rota da aplicação (127.0.0.1:5000/inicio)
-@app.route('/inicio')
+@app.route('/')
 # função da rota
-def ola():
-    jogo1 = Jogo('Tetris', 'Puzzle', 'Atari')
-    jogo2 = Jogo('World of Tanks', 'PVP', 'PC')
-    jogo3 = Jogo('War Thunder', 'PVP', 'PC')
-    lista = [jogo1, jogo2, jogo3]
+def index():
     return render_template('lista.html', titulo='jogos', jogos=lista)
 
 @app.route('/novo')
 def novo():
     return render_template('novo.html', titulo='Novo Jogo')
 
-@app.route('/criar')
+@app.route('/criar', methods=['POST',])
 def criar():
-    
+    nome = request.form['nome']
+    categoria = request.form['categoria']
+    console = request.form['console']
+    jogo = Jogo(nome, categoria, console)
+    lista.append(jogo)
+    return render_template('lista.html', titulo='Jogos', jogos=lista)
 
-# executando
-app.run()
+
+# executando em modo debug
+app.run(debug=True)
