@@ -1,5 +1,5 @@
 # imports da biblioteca do flask
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect
 
 
 class Jogo:
@@ -7,6 +7,7 @@ class Jogo:
         self.nome = nome
         self.categoria = categoria
         self.console = console
+
 
 jogo1 = Jogo('Tetris', 'Puzzle', 'Atari')
 jogo2 = Jogo('World of Tanks', 'PVP', 'PC')
@@ -24,18 +25,29 @@ app = Flask(__name__)
 def index():
     return render_template('lista.html', titulo='jogos', jogos=lista)
 
+
 @app.route('/novo')
 def novo():
     return render_template('novo.html', titulo='Novo Jogo')
 
-@app.route('/criar', methods=['POST',])
+
+@app.route('/criar', methods=['POST', ])
 def criar():
     nome = request.form['nome']
     categoria = request.form['categoria']
     console = request.form['console']
     jogo = Jogo(nome, categoria, console)
     lista.append(jogo)
-    return render_template('lista.html', titulo='Jogos', jogos=lista)
+    return redirect('/')
+
+
+@app.route('/login')
+def login():
+    return render_template('login.html')
+
+@app.route('autenticar')
+def autenticar():
+    
 
 
 # executando em modo debug
