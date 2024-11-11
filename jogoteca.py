@@ -1,5 +1,5 @@
 # imports da biblioteca do flask
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, session, flash
 
 
 class Jogo:
@@ -17,6 +17,8 @@ lista = [jogo1, jogo2, jogo3]
 # criando um objeto app chamando a função Flask (do tipo Flask),
 # o __name__ faz uma referência ao próprio arquivo
 app = Flask(__name__)
+# chave de criptografia
+app.secret_key = 'alura'
 
 
 # a rota da aplicação (127.0.0.1:5000/inicio)
@@ -41,13 +43,23 @@ def criar():
     return redirect('/')
 
 
+# Rota para a tela de login
 @app.route('/login')
 def login():
     return render_template('login.html')
 
-@app.route('autenticar')
+# Rota para autenticar usuário
+@app.route('/autenticar', methods=['POST'])
 def autenticar():
-    
+    if 'batata' == request.form['senha']:
+        # session para manter dados no cookies do navegador
+        session['usuario_logado'] = request.form['usuario']
+        # mensagem para ser exibida para o usuário
+        flash(session['usuario_logado'] + ' logado com sucesso')
+        return redirect('/')
+    else:
+        flash('Usuário não logado.')
+        return redirect('/login')
 
 
 # executando em modo debug
