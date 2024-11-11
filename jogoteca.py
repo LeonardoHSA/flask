@@ -21,7 +21,7 @@ app = Flask(__name__)
 app.secret_key = 'alura'
 
 
-# a rota da aplicação (127.0.0.1:5000/inicio)
+# a rota da aplicação (127.0.0.1:5000/)
 @app.route('/')
 # função da rota
 def index():
