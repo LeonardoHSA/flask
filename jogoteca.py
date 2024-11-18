@@ -30,6 +30,11 @@ def index():
 
 @app.route('/novo')
 def novo():
+    # verificação se o usuário está dentro da sessão ou se a sessão está vazia
+    if 'usuario_logado' not in session or session['usuario_logado'] == None:
+        # Não está logado
+        # querry string
+        return redirect('/login?proxima=novo')
     return render_template('novo.html', titulo='Novo Jogo')
 
 
@@ -46,7 +51,8 @@ def criar():
 # Rota para a tela de login
 @app.route('/login')
 def login():
-    return render_template('login.html')
+    proxima = request.args.get('proxima')
+    return render_template('login.html', proxima=proxima)
 
 # Rota para autenticar usuário
 @app.route('/autenticar', methods=['POST'])
@@ -60,6 +66,13 @@ def autenticar():
     else:
         flash('Usuário não logado.')
         return redirect('/login')
+
+# Rota para logout da aplicação.
+@app.route('/logout')
+def logout():
+    session['usuario_logado'] = None
+    flash('Logout efetuado com sucesso!')
+    return redirect('/')
 
 
 # executando em modo debug
